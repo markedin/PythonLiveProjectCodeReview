@@ -5,7 +5,12 @@ For the last two weeks of my time at the tech academy, I worked with my peers in
 
  Unlike the C# live project, I did not spend any time fixing bugs, but instead used my time developing an application by completing user stories. I worked on mostly [back end stories](#back-end-stories), but also a good amount of [front end stories](#front-end-stories) and UX improvements. I also had the chance to work with some instructors to improve my development [skills](#other-skills-learned). 
 
-Below are descriptions of the stories I worked on, along with code snippets and navigation links. I also have some full code files in this repo for the larger functionalities I implemented.
+Below are descriptions of the stories I worked on, along with code snippets and navigation links. I also have some full code files in this repo for the larger functionalities I implemented. Please keep in mind that the styling and UX design was not the focus of this project.
+
+## Other Skills Learned
+* Working with a group of developers to identify front and back end bugs to improve usability of an application
+* Improving project flow by communicating about who needs to check out which files for their current story
+* Learning new efficiencies from other developers by observing their workflow and asking questions
 
 ## Back End Stories
 * [User Model](#user-model)
@@ -109,8 +114,8 @@ Here is a quick demo of what the Beutiful Soup web interface looks like:
 ![](https://github.com/markedin/PythonLiveProjectCodeReview/blob/main/bs4gif.gif)
 
 ### API Integration
-This is where I spent most of my time during the live project. The first thing I did was try and call the API to return linked in search results. This is what my "API calling function(s)" looked like. 
-![](https://github.com/markedin/PythonLiveProjectCodeReview/blob/main/appgif.gif)
+This is where I spent most of my time during the live project. The first thing I did was try and call the API to return linked in search results. This is what my "API calling function" looked like. 
+
 
 ```py
 def getAPIdata(request, position, location):
@@ -475,7 +480,7 @@ def ScraperAPI(request):
 
 ```
 
-You'll notice that the "save_api_data()" is being called here as well. This method saves all of the API "user results" into the database, which is then passed into the template.
+You'll notice that the "save_api_data()" is being called here as well. This method saves all of the API "user results" into the database, which is then passed into the template. 
 
 ```py
 def save_api_data(jsonObj):
@@ -493,6 +498,161 @@ def save_api_data(jsonObj):
         u.last_name = user["last_name"]
         u.save()
 ```
+Here is a quick demo of the "saved" tab being shown with nothing in it. This indicates that nothing is saved into the database, because when the API results are read they are saved at the same time. 
+![](https://github.com/markedin/PythonLiveProjectCodeReview/blob/main/appgif.gif)
+
+
+## Front End Stories
+* [Home Page/Base Template](#home-template)
+* [NavBar](#navbar)
+* [API Results](#api-results)
+
+*Jump to: [Front End Stories](#front-end-stories), [Back End Stories](#back-end-stories), [Other Skills](#other-skills-learned), [Page Top](#live-project)*
+
+### Home Template
+
+When using Django, you do all of your generalized stying and loading of resources inside of the base template. Here is an example of what mine looked like. The "{% %}" syntax is unique to the Django framework, and allows you to import other templates inside of other templates. 
+
+```html
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="{% static '/css/lis_style.css' %}">
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+		<script src="{% static 'JavaScript/API_Scraper.js' %}" defer></script>
+		<title>{% block title%}Home{% endblock %}</title>
+	</head>
+	<header>
+		{% include "lis_navbar.html" %}
+	</header>
+	<body id="body">
+		<div class="body-container">
+			<div id="content-wrapper">
+				{% block content %}
+				{% endblock %}
+			</div>
+		</div>
+	</body>
+	<section class="footer-container">
+		<p id="footer-right"><a href="#">Terms</a>|<a href="#">Privacy</a></p>
+		<p id="footer-left">&copy;2023 - LinkedInScraper</p>
+	</section>
+</html>
+```
+
+Since most of the heavy lifting is done in the base template, only this was needed to display my homepage. 
+
+```html
+{% extends "lis_base.html" %}
+{% load static %}
+
+{% block title %}Home{% endblock %}
+{% block content %}
+    <h3> Welcome to LinkedInScraper</h3>
+    <hr>
+    <div class="text-center">
+        <h5>Take a look at my BeautifulSoup Interface!</h5>
+        <a href="{% url 'bs4_practice' %}"><button class="btn btn-success" type="button">Go To Page</button></a>
+    </div>
+{% endblock %}
+```
+### NavBar
+
+For my navbar, I decided to keep it contained in its own template file, and then use {% include %} in my base template to make sure it gets added to all templates "inheriting" from the navbar template. 
+
+```html
+<ul>
+    <li><a href="{% url 'lis_home' %}">Home</a></li>
+    <li><a href="{% url 'listall' %}">Saved</a></li>
+    <li><a href="{% url 'ScraperAPI' %}">Scraper API</a></li>
+    <li><a href="#">Search</a></li>
+    <li><a href="{% url 'create' %}">Create</a></li>
+    <li><a href="{% url 'bs4_practice' %}">BS4 Practice</a></li>
+    <li><a href="{% url 'favorites' %}">Favorited</a></li>
+    <li><a href="#">About</a></li>
+</ul>
+```
+
+### API Results
+
+For displaying my API results, I realized that it was a lot easier to use a for loop in conjunction with Django syntax to display all of the "Users" in my database. I also included the code to the 2 form inputs for API call parameters "position" and "location".
+
+<details>
+    <summary>Click here to see the inputs/button HTML</summary>
+
+```html
+<div class="row">
+        <div class="col-md-2">
+            <h5>Search:</h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="form-group">
+                <input type="text" class="form-control" id="position" placeholder="Position">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <input type="text" class="form-control" id="location" placeholder="Location">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <button class="btn btn-success" id="submit">Find Profiles</button>
+        </div>
+    </div>
+```
+
+</details>
+
+The line {% for result in results %} passes in all of the database entries into our template. The data is organized to make it easy to read. 
+
+```html
+<div class=container>
+        <h4>Profiles:</h4>
+    <!-- Create a table -->
+    <table class="table table-striped text-center">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Industry</th>
+                <th>Position/Company</th>
+                <th>Profile</th>
+                <th>Location</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="profiles">
+            {% for result in results %}
+            <tr>
+                <td>{{ result.first_name }} {{ result.last_name }}</td>
+                <td>{{ result.industry }}</td>
+                <td>{{ result.position }}</td>
+                <td><a href="https://www.google.com/search?q={{ result.profile_id}}" target="_blank">Profile</a></td>
+                <td>{{ result.location }}</td>
+                <td><button class="btn btn-success">Save</button></td>
+                <td><button class="btn btn-danger">Delete</button></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+```
+
+*Jump to: [Front End Stories](#front-end-stories), [Back End Stories](#back-end-stories), [Other Skills](#other-skills-learned), [Page Top](#live-project)*
+
+
+
+
+
 
 
 
