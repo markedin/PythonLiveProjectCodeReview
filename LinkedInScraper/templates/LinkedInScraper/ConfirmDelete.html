@@ -1,0 +1,17 @@
+{% extends "lis_base.html" %}
+{% load static %}
+{% block title %}Delete Confirmation {% endblock %}
+{% block content %}
+
+<form method = "POST" action=".">
+    {% csrf_token %}
+    <h2>Confirm Delete</h2>
+    <p> Are you sure you would like to delete "{{ user.first_name }} {{user.last_name}}" from the database?</p>
+
+    {{ user.as_p }}
+
+    <input type="submit" value="Yes, delete it!" class="btn">
+    <a href="{% url 'lis_home' %}"><button class="btn" type="button">Cancel</button></a>
+</form>
+
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "lis_base.html" %}
+{% load static %}
+
+{% block title %}User List{% endblock %}
+{% block content %}
+
+    <table class="table table-responsive" id ="users-table">
+        <tr id="headerRow">
+            <th>Name</th>
+            <th>Employer</th>
+        </tr>
+        {% for user in users %}
+        <tr>
+            <td class="left">{{ user.first_name }} {{ user.last_name }}</td>
+            <td class="center">{{ user.company }}</td>
+            <td class="right"><a href="../{{ user.pk }}/details/"><button class="btn btn-warning" type="button">Details</button></a></td>
+
+        </tr>
+        {% endfor %}
+    </table>
+
+{%endblock%}

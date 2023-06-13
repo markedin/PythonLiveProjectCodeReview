@@ -1,0 +1,16 @@
+{% extends "lis_base.html" %}
+{% load static %}
+
+{% block title %}Create User{% endblock %}
+{% block content %}
+    <h3>CREATE NEW USER</h3>
+    <div id="user-form">
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button id="new-user-button" type="submit" name="Save_User">Create User</button>
+        </form>
+        <br>
+    </div>
+
+{%endblock%}

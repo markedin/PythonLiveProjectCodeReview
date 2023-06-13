@@ -1,0 +1,43 @@
+{% extends "lis_base.html" %}
+{% load static %}
+
+{% block title %}BS4 Practice{% endblock %}
+{% block content %}
+<div class="container">
+    <h1 class="mt-5">Get HTML Information From Any Website!</h1>
+
+  <!-- Form -->
+    <form method="POST" action="{% url 'bs4_practice' %}">
+        {% csrf_token %}
+        <div class="mt-4">
+            <div class="col">
+                <input type="url" name="url" class="form-control" placeholder="Enter URL" rows="2" required="required">
+            </div>
+            <button type="submit" class="btn btn-primary mt-2">Get info</button>
+        </div>
+    </form>
+
+  <!-- Results -->
+    <div class="results-container">
+        <div class="result-title">
+            <h4>Title: </h4>
+            <p>{{title.as_ul}}</p>
+        </div>
+        <div class="result-atags">
+            <h4>A-Tags: </h4>
+            <p>{{atags}}</p>
+        </div>
+        <div class="result-ptags">
+            <h4>P-Tags: </h4>
+            <p>{{ptags}}</p>
+        </div>
+        <div class="result-alltext">
+            <h4>All Content: </h4>
+            <p>{{alltext}}</p>
+        </div>
+    </div>
+
+
+</div>
+
+{% endblock %}

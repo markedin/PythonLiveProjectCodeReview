@@ -1,0 +1,64 @@
+{% extends "lis_base.html" %}
+{% load static %}
+{% block title %} ScraperAPI {% endblock %}
+{% block content %}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-2">
+            <h5>Search:</h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="form-group">
+                <input type="text" class="form-control" id="position" placeholder="Position">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <input type="text" class="form-control" id="location" placeholder="Location">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <button class="btn btn-success" id="submit">Find Profiles</button>
+        </div>
+    </div>
+
+    <br>
+    <h4>Profiles:</h4>
+    <!-- Create a table -->
+    <table class="table table-striped text-center">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Industry</th>
+                <th>Position/Company</th>
+                <th>Profile</th>
+                <th>Location</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="profiles">
+            {% for result in results %}
+            <tr>
+
+                <td>{{ result.first_name }} {{ result.last_name }}</td>
+                <td>{{ result.industry }}</td>
+                <td>{{ result.position }}</td>
+                <td><a href="https://www.google.com/search?q={{ result.profile_id}}" target="_blank">Profile</a></td>
+                <td>{{ result.location }}</td>
+                <td><button class="btn btn-success">Save</button></td>
+                <td><button class="btn btn-danger">Delete</button></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+
+{% endblock %}
+
