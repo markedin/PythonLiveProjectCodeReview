@@ -105,7 +105,8 @@ def bs4_practice(request):
     return render(request, "LinkedInScraper/BS4_practice.html")
 
 ```
-
+Here is a quick demo of what the Beutiful Soup web interface looks like: 
+![](https://github.com/markedin/PythonLiveProjectCodeReview/blob/main/bs4vid.mp4)
 
 ### API Integration
 This is where I spent most of my time during the live project. The first thing I did was try and call the API to return linked in search results. This is what my "API calling function" looked like. 
