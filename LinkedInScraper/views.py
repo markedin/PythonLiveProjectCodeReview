@@ -126,8 +126,9 @@ def getAPIdata(request, position, location):
         }
         headers = {
             "content-type": "application/json",
-            "X-RapidAPI-Key": "b78726393dmsh8a2641c5fdf7bb2p15c8cfjsnf0bf28e36356",
-            "X-RapidAPI-Host": "linkedin-profiles-and-company-data.p.rapidapi.com"
+            # Removed key and host so I don't incur charges by making all of this code public :) 
+            "X-RapidAPI-Key": "KEY",
+            "X-RapidAPI-Host": "HOST"
         }
 
         response = requests.post(url, json=payload, headers=headers)
